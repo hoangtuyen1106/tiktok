@@ -35,8 +35,8 @@
                     <Icon name="mdi:dots-vertical" color="#161724" size="25"/>
                 </div>
                 <div class="flex items-center">
-                    <Icon class="ml-1 mr-4" name="carbon:send-alt" color="#161724" size="30" />
-                    <Icon class="mr-5" name="bx:message-detail" color="#161724" size="27" />
+                    <Icon class="ml-1 mr-4" name="carbon:send-alt" style="color: #161724" size="30" />
+                    <Icon class="mr-5" name="bx:message-detail" style="color: #161724" size="27" />
                     <div class="relative">
                         <button 
                             class="mt-1"
@@ -71,6 +71,8 @@
 </template>
 
 <script setup>
+    const {$userStore, $generalStore } = useNuxtApp()
+
     const route = useRoute()
     let showMenu = ref(false)
 </script>
