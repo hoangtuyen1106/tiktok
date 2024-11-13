@@ -1,13 +1,14 @@
-import { useUserStore } from "~/stores/user";
-import { useProfileStore } from "~/stores/profile";
-import { useGeneralStore } from "~/stores/general";
+import { useUserStore } from "~/stores/user"
+import { useProfileStore } from "~/stores/profile"
+import { useGeneralStore } from "~/stores/general"
 
 export default defineNuxtPlugin((NuxtApp) => {
     return {
-        provide: {
+        
+        provide: { 
             userStore: useUserStore(),
-            profile: useProfileStore(),
-            general: useGeneralStore()
-        }
+            profileStore: useProfileStore(),
+            generalStore: useGeneralStore()
+        },
     }
 })
