@@ -95,8 +95,8 @@ let showMenu = ref(false)
 
 onMounted(() => {
     document.addEventListener('mouseup', function(e) {
-        let popupMenu = document.getElementById('PopupMenu');
-        if (!popupMenu.contains(e.target)) {
+        let popupMenu = document.querySelector('#PopupMenu');
+        if (popupMenu && !popupMenu.contains(e.target)) {
             showMenu.value = false
         }
     });

@@ -49,7 +49,7 @@ const login = async () => {
         $generalStore.isLoginOpen = false
 
     } catch (error) {
-        errors.value = error.response.data.errors
+        errors.value = error?.response?.data?.errors || ''
     }
 }
 </script>

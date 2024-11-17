@@ -75,7 +75,7 @@ const register = async () => {
         $generalStore.isLoginOpen = false
     } catch (error) {
         console.log(error);
-        errors.value = error.response.data.errors
+        errors.value = error.response.data.errors || ''
     }
 }
 </script>

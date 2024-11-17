@@ -120,8 +120,30 @@ const getUploadedImage = (e) => {
     file.value = e.target.files[0]
     uploadedImage.value = URL.createObjectURL(file.value)
 }
+
+const cropAndUpdateImage = async () => {
+    const { coordinates } = cropper.value.getResult()
+
+    let data = new FormData();
+    data.append('image', file.value || '')
+    data.append('height', coordinates.height || '')
+    data.append('width', coordinates.width || '')
+    data.append('left', coordinates.left || '')
+    data.append('top', coordinates.top || '')
+
+    try {
+        await $userStore.updateUserImage(data)
+        await $userStore.getUser()
+        await $profileStore.getProfile(route.params.id)
+
+        $generalStore.updateSideMenuImage($generalStore.suggested, $userStore)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 watch(() => userName.value, () => {
-    if(!userName.value || userName.value === name.value) {
+    if (!userName.value || userName.value === name.value) {
         isUpdated.value = false
     } else {
         isUpdated.value = true
@@ -129,7 +151,7 @@ watch(() => userName.value, () => {
 })
 
 watch(() => userBio.value, () => {
-    if(!userBio.value || userBio.value .length < 1) {
+    if (!userBio.value || userBio.value.length < 1) {
         isUpdated.value = false
     } else {
         isUpdated.value = true

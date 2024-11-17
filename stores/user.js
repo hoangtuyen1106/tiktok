@@ -40,6 +40,14 @@ export const useUserStore = defineStore('user', {
             this.$state.image = res.data[0].image
         },
 
+        async updateUserImage(data) {
+            return await $axios.post('/api/update-user-image', data)
+        },
+
+        async createPost(data) {
+            return await $axios.post('/api/posts', data)
+        },
+
         async logout() {
             await $axios.post('/logout')
             this.resetUser()
