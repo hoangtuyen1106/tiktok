@@ -1,6 +1,10 @@
 <template>
-    <div @click="$event => displayPost(post)" @mouseenter="isHover(true)" @mouseleave="isHover(false)"
-        class="relative brightness-90 hove:brightness-[1.1] cursor-pointer">
+    <div 
+        @click="$event => displayPost(post)" 
+        @mouseenter="isHover(true)" 
+        @mouseleave="isHover(false)"
+        class="relative brightness-90 hove:brightness-[1.1] cursor-pointer"
+    >
         <div v-if="!isLoaded"
             class="absolute flex items-center justify-center top-0 left-0 aspect-[3/4] w-full object-cover rounded-md bg-black">
             <Icon class="animate-spin ml-1" name="mingcute:loading-line" size="100" style="color: #FFFFFF" />
@@ -59,7 +63,7 @@ onBeforeUnmount(() => {
 const displayPost = (post) => {
     $generalStore.setBackUrl("/profile/" + route.params.id)
     $generalStore.selectedPost = null
-    setTimeout(() => route.push(`/post/${post.id}`), 300)
+    setTimeout(() => router.push(`/post/${post.id}`), 300)
 }
 
 const isHover = (bool) => {

@@ -22,7 +22,7 @@
                         </div>
                         <div class="flex items-center justify-center sm:-mt-6">
                             <label for="image" class="relative cursor-pointer">
-                                <img class="rounded-full" width="95" src="https://picsum.photos/id/8/300/320" />
+                                <img class="rounded-full" width="95" :src="userImage" />
                                 <div
                                     class="absolute bottom-0 right-0 rounded-full bg-white shadow-xl border p-1 border-gray-300 inline-block w-[32px]">
                                     <Icon name="ph:pencil-simple-line-bold" size="17" class="-mt-1 ml-0.5" />
@@ -84,6 +84,19 @@
                         <span class="px-2 font-medium text-[15px]">Cancel</span>
                     </button>
 
+                    <button :disabled="!isUpdated" @click="$event => updateUserInfo()"
+                        :class="!isUpdated ? 'bg-gray-200' : 'bg-[#F02C56]'"
+                        class="flex items-center bg-[#F02C56] text-white border rounded-md ml-3 px-3 py-[6px]">
+                        <span class="mx-4 font-medium text-[15px]">Apply</span>
+                    </button>
+                </div>
+
+                <div id="CropperButtons" v-else class="flex items-center justify-end">
+                    <button @click="$event => uploadedImage = null"
+                        class="flex items-center border rounded-sm px-3 py-[6px] hover:bg-gray-100">
+                        <span class="px-2 font-medium text-[15px]">Cancel</span>
+                    </button>
+
                     <button @click="cropAndUpdateImage()"
                         class="flex items-center bg-[#F02C56] text-white border rounded-md ml-3 px-3 py-[6px]">
                         <span class="mx-4 font-medium text-[15px]">Apply</span>
@@ -98,9 +111,12 @@
 import { Cropper, CircleStencil } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 import { storeToRefs } from 'pinia';
+import { set } from '~/node_modules/nuxt/dist/app/compat/capi';
 
 const { $userStore, $generalStore, $profileStore } = useNuxtApp()
 const { name, bio, image } = storeToRefs($userStore)
+
+const route = useRoute()
 
 onMounted(() => {
     userName.value = name.value
@@ -137,6 +153,27 @@ const cropAndUpdateImage = async () => {
         await $profileStore.getProfile(route.params.id)
 
         $generalStore.updateSideMenuImage($generalStore.suggested, $userStore)
+        $generalStore.updateSideMenuImage($generalStore.following, $userStore)
+
+        userImage.value = image.value
+        uploadedImage.value = null
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const updateUserInfo = async () => {
+    try {
+        await $userStore.updateUser(userName.value, userBio.value)
+        await $userStore.getUser()
+        await $profileStore.getProfile(route.params.id)
+
+        userName.value = name.value
+        userBio.value = bio.value
+
+        setTimeout(() => {
+            $generalStore.isEditProfileOpen = false
+        }, 100)
     } catch (error) {
         console.log(error)
     }
@@ -151,7 +188,7 @@ watch(() => userName.value, () => {
 })
 
 watch(() => userBio.value, () => {
-    if (!userBio.value || userBio.value.length < 1) {
+    if (!userName.value || userBio.value.length < 1) {
         isUpdated.value = false
     } else {
         isUpdated.value = true
